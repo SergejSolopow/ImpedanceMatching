@@ -3,7 +3,7 @@ from L_Load_Setup import Ui_L_Load_Setup
 from C_Tune_Setup import Ui_C_Tune_Setup
 from L_Tune_Setup import Ui_L_Tune_Setup
 from PyQt5 import QtCore, QtGui, QtWidgets
-from Visualisation import VisualWindow
+from Visualisation import VisualWindow, TransferedData
 import sys
 
 
@@ -29,7 +29,8 @@ class Ui_MainWindow(object):
         self.l_tune_start_value = 0
         self.l_tune_step_size = 0
 
-        #self.start_visualisation()
+        self.real_part_load = 0
+        self.imag_part_load = 0
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -222,12 +223,17 @@ class Ui_MainWindow(object):
         self.groupBox_7 = QtWidgets.QGroupBox(self.groupBox_5)
         self.groupBox_7.setGeometry(QtCore.QRect(10, 30, 120, 281))
         self.groupBox_7.setObjectName("groupBox_7")
-        self.lineEdit_4 = QtWidgets.QLineEdit(self.groupBox_7)
-        self.lineEdit_4.setGeometry(QtCore.QRect(0, 60, 113, 31))
-        self.lineEdit_4.setObjectName("lineEdit_4")
-        self.lineEdit_5 = QtWidgets.QLineEdit(self.groupBox_7)
-        self.lineEdit_5.setGeometry(QtCore.QRect(0, 150, 113, 31))
-        self.lineEdit_5.setObjectName("lineEdit_5")
+
+        self.lineRealPart = QtWidgets.QLineEdit(self.groupBox_7)
+        self.lineRealPart.setGeometry(QtCore.QRect(0, 60, 113, 31))
+        self.lineRealPart.setObjectName("lineRealPart")
+        self.lineRealPart.returnPressed.connect(lambda: self.set_real_value())
+
+        self.lineImagPart = QtWidgets.QLineEdit(self.groupBox_7)
+        self.lineImagPart.setGeometry(QtCore.QRect(0, 150, 113, 31))
+        self.lineImagPart.setObjectName("lineImagPart")
+        self.lineImagPart.returnPressed.connect(lambda: self.set_imag_value())
+
         self.label = QtWidgets.QLabel(self.groupBox_7)
         self.label.setGeometry(QtCore.QRect(0, 40, 47, 13))
         self.label.setObjectName("label")
@@ -319,12 +325,19 @@ class Ui_MainWindow(object):
         self.actionImport_data.setText(_translate("MainWindow", "Import data"))
         self.actionSave_data.setText(_translate("MainWindow", "Save data"))
     
-    def start_visualisation(self):
-        #pass        
+    def start_visualisation(self):     
         self.window = QtWidgets.QMainWindow()
         self.ui = VisualWindow()
         self.ui.setUi(self.window)    
         self.window.show()
+    
+    def set_imag_value(self):
+        text = self.lineImagPart.text()
+        self.imag_part_load = float(text)
+
+    def set_real_value(self):
+        text = self.lineRealPart.text()
+        self.real_part_load = float(text)
         
     def change_c_load_lcd(self):
         self.c_load_lcd.display(self.c_load_slider.value())
