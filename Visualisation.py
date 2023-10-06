@@ -4,17 +4,59 @@ import matplotlib
 matplotlib.use('Qt5Agg')
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow
+import numpy as np
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-class TrasferedData():
-    frequency_range_min = 5000000
-    frequency_range_max = 30000000
+class TransferedData():
+    frequency_min = 5000000
+    frequency_max = 30000000
+    frequency_domain = np.linspace(frequency_min, frequency_max, 1000) 
+    impedance_domain = []
+ 
     c_load = 0
     l_load = 0
     c_tune = 0 
     l_tune = 0
+
+    @staticmethod
+    def set_c_load(value):
+        TransferedData.c_load = np.power(value * TransferedData.frequency_domain * 1j, -1)
+    @staticmethod
+    def get_c_load():
+        return TransferedData.c_load    
+    @staticmethod
+    def set_l_load(value):
+        TransferedData.l_load = value * TransferedData.frequency_domain * 1j
+    @staticmethod
+    def get_l_load():
+        return TransferedData.l_load    
+    @staticmethod
+    def set_c_tune(value):
+        TransferedData.c_tune = np.power(value * TransferedData.frequency_domain * 1j, -1)
+    @staticmethod
+    def get_c_tune(value):
+        return TransferedData.c_tune    
+    @staticmethod
+    def set_l_tune(value):
+        TransferedData.l_tune = value * TransferedData.frequency_domain * 1j
+    @staticmethod
+    def get_l_tune():
+        return TransferedData.l_tune
+    @staticmethod
+    def set_frequency_min(value):
+        TransferedData.frequency_min = value
+    @staticmethod
+    def get_frequency_min():
+        return TransferedData.frequency_min
+    @staticmethod
+    def set_frequency_max(value):
+        TransferedData.frequency_max = value
+    @staticmethod
+    def get_frequency_max():
+        return TransferedData.frequency_max
+
 
 class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=3, height=1, dpi=100):
