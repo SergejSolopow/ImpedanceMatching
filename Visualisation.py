@@ -15,6 +15,7 @@ class TransferedData():
     frequency_domain = np.linspace(frequency_min, frequency_max, 1000) 
     impedance_domain = []
  
+    #the following four entities are impedance values of the corresponding network components 
     c_load = 0
     l_load = 0
     c_tune = 0 
