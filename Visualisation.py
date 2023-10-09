@@ -12,7 +12,10 @@ from matplotlib.figure import Figure
 class TransferedData():
     frequency_min = 5000000
     frequency_max = 30000000
-    frequency_domain = np.linspace(frequency_min, frequency_max, 1000) 
+    #by_default 1000
+    lin_steps = 1000
+    frequency_domain = np.linspace(frequency_min, frequency_max, lin_steps) 
+    load_domain = []
     impedance_domain = []
  
     #the following four entities are impedance values of the corresponding network components 
@@ -21,6 +24,18 @@ class TransferedData():
     c_tune = 0 
     l_tune = 0
 
+    @staticmethod
+    def set_impedance_domain():
+        term_1  = np.power(TransferedData.c_load + TransferedData.l_load + TransferedData.load_domain, -1) 
+        term_2 = np.power(TransferedData.c_tune + TransferedData.l_tune)
+        TransferedData.set_impedance_domain = np.power((TransferedData.term_1 + TransferedData.term_2), -1)
+
+    @ staticmethod
+    def set_load_domain(real, imag): 
+        TransferedData.load_domain = (real + imag * 1j) * np.ones(TransferedData.lin_steps)
+    @staticmethod
+    def get_load_domain():
+        return TransferedData.load_domain
     @staticmethod
     def set_c_load(value):
         TransferedData.c_load = np.power(value * TransferedData.frequency_domain * 1j, -1)
