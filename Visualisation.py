@@ -15,14 +15,17 @@ class TransferedData():
     #by_default 1000
     lin_steps = 1000
     frequency_domain = np.linspace(frequency_min, frequency_max, lin_steps) 
-    load_domain = []
-    impedance_domain = []
+    load_domain = np.ones(lin_steps)
+    impedance_domain = np.ones(lin_steps)
+    condensator_prefix = 1e-12
+    coil_prefix = 1e-6
+    
  
     #the following four entities are impedance values of the corresponding network components 
-    c_load = 0
-    l_load = 0
-    c_tune = 0 
-    l_tune = 0
+    c_load = np.ones(lin_steps)
+    l_load = np.ones(lin_steps)
+    c_tune = np.ones(lin_steps)
+    l_tune = np.ones(lin_steps)
 
     @staticmethod
     def set_impedance_domain():
@@ -38,25 +41,25 @@ class TransferedData():
         return TransferedData.load_domain
     @staticmethod
     def set_c_load(value):
-        TransferedData.c_load = np.power(value * TransferedData.frequency_domain * 1j, -1)
+        TransferedData.c_load = np.power(TransferedData.condensator_prefix * value * TransferedData.frequency_domain * 1j, -1)
     @staticmethod
     def get_c_load():
         return TransferedData.c_load    
     @staticmethod
     def set_l_load(value):
-        TransferedData.l_load = value * TransferedData.frequency_domain * 1j
+        TransferedData.l_load = TransferedData.coil_prefix * value * TransferedData.frequency_domain * 1j
     @staticmethod
     def get_l_load():
         return TransferedData.l_load    
     @staticmethod
     def set_c_tune(value):
-        TransferedData.c_tune = np.power(value * TransferedData.frequency_domain * 1j, -1)
+        TransferedData.c_tune = np.power(TransferedData.condensator_prefix * value * TransferedData.frequency_domain * 1j, -1)
     @staticmethod
     def get_c_tune(value):
         return TransferedData.c_tune    
     @staticmethod
     def set_l_tune(value):
-        TransferedData.l_tune = value * TransferedData.frequency_domain * 1j
+        TransferedData.l_tune = TransferedData.coil_prefix * value * TransferedData.frequency_domain * 1j
     @staticmethod
     def get_l_tune():
         return TransferedData.l_tune
@@ -73,7 +76,6 @@ class TransferedData():
     def get_frequency_max():
         return TransferedData.frequency_max
 
-
 class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=3, height=1, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
@@ -85,20 +87,16 @@ class VisualWindow(object):
         qWindow.setObjectName("qWindow")
         qWindow.setWindowTitle("Visualisation")
         qWindow.resize(800, 600)
-        self.centralwidget = QtWidgets.QWidget(qWindow)
-        
+        self.centralwidget = QtWidgets.QWidget(qWindow)        
         self.canvas = MplCanvas(self, width=5, height=4, dpi=80)
         qWindow.setCentralWidget(self.canvas)
         
-        n_data = 50
-        self.xdata = list(range(n_data))
-        self.ydata = [random.randint(0, 10) for i in range(n_data)]
-        self.update_plot()
         
+        self.xdata = TransferedData.frequency_domain
+        self.ydata = TransferedData.impedance_domain
+        self.update_plot()        
 
     def update_plot(self):
-        # Drop off the first y element, append a new one.
-        self.ydata = self.ydata[1:] + [random.randint(0, 10)]
         self.canvas.axes.cla()  # Clear the canvas.
         self.canvas.axes.plot(self.xdata, self.ydata, 'r')
         # Trigger the canvas to update and redraw.
