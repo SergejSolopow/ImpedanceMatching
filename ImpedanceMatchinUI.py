@@ -331,16 +331,35 @@ class Ui_MainWindow(object):
         self.ui.setUi(self.window)    
         self.window.show()
     
+    #set imagenary part for the impedance of the load
     def set_imag_value(self):
         text = self.lineImagPart.text()
         self.imag_part_load = float(text)
 
+    #set real part for the impedance of the load
     def set_real_value(self):
         text = self.lineRealPart.text()
         self.real_part_load = float(text)
         
     def change_c_load_lcd(self):
-        self.c_load_lcd.display(self.c_load_slider.value())
+        slider_value = self.c_load_slider.value()
+        self.c_load_lcd.display(slider_value)
+        TransferedData.set_c_load(slider_value)
+
+    def change_l_load_lcd(self):
+        slider_value = self.l_load_slider.value()
+        self.l_load_lcd.display(slider_value)
+        TransferedData.set_l_load(slider_value)
+    
+    def change_c_tune_lcd(self):
+       slider_value = self.c_tune_slider.value()
+       self.c_tune_lcd.display(slider_value)
+       TransferedData.set_c_tune(slider_value)
+    
+    def change_l_tune_lcd(self):
+       slider_value = self.l_tune_slider.value()
+       self.l_tune_lcd.display(slider_value)
+       TransferedData.set_l_tune(slider_value)
 
     def set_c_load_lcd(self):
         str_value = self.c_load_edit.text()
@@ -375,9 +394,6 @@ class Ui_MainWindow(object):
             self.c_load_step_size = int(str_value)
             self.c_load_slider.setSingleStep(self.c_load_step_size)
         self.window.show()
-    
-    def change_l_load_lcd(self):
-        self.l_load_lcd.display(self.l_load_slider.value())
 
     def set_l_load_lcd(self):
         str_value = self.l_load_edit.text()
@@ -413,9 +429,6 @@ class Ui_MainWindow(object):
             self.l_load_slider.setSingleStep(self.l_load_step_size)
         self.window.show()
 
-    def change_c_tune_lcd(self):
-        self.c_tune_lcd.display(self.c_tune_slider.value())
-
     def set_c_tune_lcd(self):
         str_value = self.c_tune_edit.text()
         self.c_tune_start_value = int(str_value)
@@ -449,9 +462,6 @@ class Ui_MainWindow(object):
             self.c_tune_step_size = int(str_value)
             self.c_tune_slider.setSingleStep(self.c_tune_step_size)
         self.window.show()    
-
-    def change_l_tune_lcd(self):
-        self.l_tune_lcd.display(self.l_tune_slider.value())
 
     def set_l_tune_lcd(self):
         str_value = self.l_tune_edit.text()

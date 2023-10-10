@@ -18,8 +18,7 @@ class TransferedData():
     load_domain = np.ones(lin_steps)
     impedance_domain = np.ones(lin_steps)
     condensator_prefix = 1e-12
-    coil_prefix = 1e-6
-    
+    coil_prefix = 1e-6    
  
     #the following four entities are impedance values of the corresponding network components 
     c_load = np.ones(lin_steps)
@@ -89,8 +88,7 @@ class VisualWindow(object):
         qWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(qWindow)        
         self.canvas = MplCanvas(self, width=5, height=4, dpi=80)
-        qWindow.setCentralWidget(self.canvas)
-        
+        qWindow.setCentralWidget(self.canvas)        
         
         self.xdata = TransferedData.frequency_domain
         self.ydata = TransferedData.impedance_domain
