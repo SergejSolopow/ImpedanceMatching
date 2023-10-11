@@ -501,8 +501,13 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()    
-    ui.setupUi(MainWindow)    
+    ui.setupUi(MainWindow)        
     MainWindow.show()
-    ui.call_c_load_setup()
-    ui.start_visualisation()
+    
+    #open window with visualization
+    vis_window = QtWidgets.QMainWindow()
+    vis = VisualWindow()
+    vis.setUi(vis_window)    
+    vis_window.show()
+    
     sys.exit(app.exec_())   

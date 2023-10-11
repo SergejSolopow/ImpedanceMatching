@@ -12,7 +12,7 @@ from matplotlib.figure import Figure
 class TransferedData():
     frequency_min = 5000000
     frequency_max = 30000000
-    #by_default 1000
+    #by default linsteps is 1000
     lin_steps = 1000
     frequency_domain = np.linspace(frequency_min, frequency_max, lin_steps) 
     load_domain = np.ones(lin_steps)
