@@ -97,7 +97,6 @@ class MplCanvas(FigureCanvas):
         super().__init__(fig)
 
 class VisualWindow(object):
-
     def __init__(self):
         self.signal = Signal()
         self.frequency_min = 5000000
@@ -114,6 +113,59 @@ class VisualWindow(object):
         self.c_tune = np.ones(self.lin_steps)
         self.l_tune = np.ones(self.lin_steps)
 
+    def set_impedance_domain(self):
+        term_1  = np.power(self.c_load + self.l_load + self.load_domain, -1) 
+        term_2 = np.power(self.c_tune + self.l_tune)
+        self.impedance_domain = np.power((term_1 + term_2), -1)
+
+    def get_freueny_domain(self):
+        return self.frequency_domain
+    
+    def set_frequency_domain(self):
+        self.frequency_domain = np.linspace(self.set_frequency_min, self.set_frequency_maxfrequency_max, self.lin_steps) 
+    
+    def set_load_domain(self, real, imag): 
+        self.load_domain = (real + imag * 1j) * np.ones(self.lin_steps)
+    
+    def get_load_domain(self):
+        return self.load_domain
+    
+    def set_c_load(self, value):
+        self.c_load = np.power(self.condensator_prefix * value * self.frequency_domain * 1j, -1)
+    
+    def get_c_load(self):
+        return self.c_load    
+    
+    def set_l_load(self, value):
+        self.l_load = self.coil_prefix * value * self.frequency_domain * 1j
+    
+    def get_l_load(self):
+        return self.l_load    
+    
+    def set_c_tune(self, value):
+        self.c_tune = np.power(self.condensator_prefix * value * self.frequency_domain * 1j, -1)
+    
+    def get_c_tune(self):
+        return self.c_tune    
+    
+    def set_l_tune(self, value):
+        self.l_tune = self.coil_prefix * value * self.frequency_domain * 1j
+    
+    def get_l_tune(self):
+        return self.l_tune
+    
+    def set_frequency_min(self, value):
+        self.frequency_min = value
+    
+    def get_frequency_min(self):
+        return self.frequency_min
+    
+    def set_frequency_max(self, value):
+        self.frequency_max = value
+    
+    def get_frequency_max(self):
+        return self.frequency_max
+    
     def setUi(self, qWindow):
         qWindow.setObjectName("qWindow")
         qWindow.setWindowTitle("Visualisation")
