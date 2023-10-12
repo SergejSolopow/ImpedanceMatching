@@ -3,7 +3,7 @@ from L_Load_Setup import Ui_L_Load_Setup
 from C_Tune_Setup import Ui_C_Tune_Setup
 from L_Tune_Setup import Ui_L_Tune_Setup
 from PyQt5 import QtCore, QtGui, QtWidgets
-from Visualisation import VisualWindow, TransferedData
+from Visualisation import VisualWindow
 import sys
 
 
@@ -336,31 +336,33 @@ class Ui_MainWindow(object):
     def set_imag_value(self):
         text = self.lineImagPart.text()
         self.imag_part_load = float(text)
+        self.visualisation.set_load_domain(imag = float(text))
 
     #set real part for the impedance of the load
     def set_real_value(self):
         text = self.lineRealPart.text()
         self.real_part_load = float(text)
+        self.visualisation.set_load_domain(real = float(text))
         
     def change_c_load_lcd(self):
         slider_value = self.c_load_slider.value()
         self.c_load_lcd.display(slider_value)
-        TransferedData.set_c_load(slider_value)
+        self.visualisation.set_c_load(slider_value)
 
     def change_l_load_lcd(self):
         slider_value = self.l_load_slider.value()
         self.l_load_lcd.display(slider_value)
-        TransferedData.set_l_load(slider_value)
+        self.visualisation.set_l_load(slider_value)
     
     def change_c_tune_lcd(self):
        slider_value = self.c_tune_slider.value()
        self.c_tune_lcd.display(slider_value)
-       TransferedData.set_c_tune(slider_value)
+       self.visualisation.set_c_tune(slider_value)
     
     def change_l_tune_lcd(self):
        slider_value = self.l_tune_slider.value()
        self.l_tune_lcd.display(slider_value)
-       TransferedData.set_l_tune(slider_value)
+       self.visualisation.set_l_tune(slider_value)
 
     def set_c_load_lcd(self):
         str_value = self.c_load_edit.text()
