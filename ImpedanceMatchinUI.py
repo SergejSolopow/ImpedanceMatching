@@ -31,6 +31,7 @@ class Ui_MainWindow(object):
 
         self.real_part_load = 0
         self.imag_part_load = 0
+        self.visualisation = VisualWindow()
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -499,6 +500,7 @@ class Ui_MainWindow(object):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    #open window with settings
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()    
     ui.setupUi(MainWindow)        
@@ -506,8 +508,9 @@ if __name__ == "__main__":
     
     #open window with visualization
     vis_window = QtWidgets.QMainWindow()
-    vis = VisualWindow()
-    vis.setUi(vis_window)    
+    #vis = VisualWindow()
+    #vis.setUi(vis_window)
+    ui.visualisation.setUi(vis_window)    
     vis_window.show()
     
     sys.exit(app.exec_())   

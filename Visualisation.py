@@ -5,11 +5,20 @@ matplotlib.use('Qt5Agg')
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow
 import numpy as np
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import QObject 
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
+class SignalTest(QObject):
+    signal = pyqtSignal()    
+    
+    def emit_signal(self):
+        self.signal.emit()
+
 class TransferedData():
+
     frequency_min = 5000000
     frequency_max = 30000000
     #by default linsteps is 1000
@@ -32,7 +41,13 @@ class TransferedData():
         term_2 = np.power(TransferedData.c_tune + TransferedData.l_tune)
         TransferedData.set_impedance_domain = np.power((TransferedData.term_1 + TransferedData.term_2), -1)
 
-    @ staticmethod
+    @staticmethod
+    def get_freueny_domain():
+        return TransferedData.frequency_domain
+    @staticmethod
+    def set_frequency_domain():
+        TransferedData.frequency_domain = np.linspace(TransferedData.set_frequency_min, TransferedData.set_frequency_maxfrequency_max, TransferedData.lin_steps) 
+    @staticmethod
     def set_load_domain(real, imag): 
         TransferedData.load_domain = (real + imag * 1j) * np.ones(TransferedData.lin_steps)
     @staticmethod
@@ -81,20 +96,39 @@ class MplCanvas(FigureCanvas):
         self.axes = fig.add_subplot(111)
         super().__init__(fig)
 
-class VisualWindow(object):
+class VisualWindow(QObject):
+    signal = pyqtSignal()
+
+    def __init__(self):
+        self.frequency_min = 5000000
+        self.frequency_max = 30000000
+        #by default linsteps is 1000
+        self.lin_steps = 1000
+        self.frequency_domain = np.linspace(self.frequency_min, self.frequency_max, self.lin_steps) 
+        self.load_domain = np.ones(self.lin_steps)
+        self.impedance_domain = np.ones(self.lin_steps)
+        self.condensator_prefix = 1e-12
+        self.coil_prefix = 1e-6 
+    
+    def emit_signal(self):
+        self.signal.emit()
+
     def setUi(self, qWindow):
         qWindow.setObjectName("qWindow")
         qWindow.setWindowTitle("Visualisation")
         qWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(qWindow)        
         self.canvas = MplCanvas(self, width=5, height=4, dpi=80)
-        qWindow.setCentralWidget(self.canvas)        
-        
+        qWindow.setCentralWidget(self.canvas)    
+
+        #self.t_signal = SignalTest()
+                
         self.xdata = TransferedData.frequency_domain
         self.ydata = TransferedData.impedance_domain
         self.update_plot()        
 
     def update_plot(self):
+        #self.signal.emit_signal()
         self.canvas.axes.cla()  # Clear the canvas.
         self.canvas.axes.plot(self.xdata, self.ydata, 'r')
         # Trigger the canvas to update and redraw.
