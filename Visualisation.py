@@ -99,6 +99,7 @@ class MplCanvas(FigureCanvas):
 class VisualWindow(object):
     def __init__(self):
         self.signal = Signal()
+        
         self.frequency_min = 5000000
         self.frequency_max = 30000000
         #by default linsteps is 1000
