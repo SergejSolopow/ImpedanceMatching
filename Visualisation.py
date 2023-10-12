@@ -99,7 +99,7 @@ class MplCanvas(FigureCanvas):
 class VisualWindow(object):
     def __init__(self):
         self.signal = Signal()
-        
+        self.signal.signal.connect(self.update_plot)        
         self.frequency_min = 5000000
         self.frequency_max = 30000000
         #by default linsteps is 1000
@@ -119,50 +119,59 @@ class VisualWindow(object):
         term_2 = np.power(self.c_tune + self.l_tune)
         self.impedance_domain = np.power((term_1 + term_2), -1)
 
+
     def get_freueny_domain(self):
         return self.frequency_domain
     
     def set_frequency_domain(self):
         self.frequency_domain = np.linspace(self.set_frequency_min, self.set_frequency_maxfrequency_max, self.lin_steps) 
+        self.signal.emit_signal()
     
     def set_load_domain(self, real, imag): 
         self.load_domain = (real + imag * 1j) * np.ones(self.lin_steps)
+        self.signal.emit_signal()
     
     def get_load_domain(self):
         return self.load_domain
     
     def set_c_load(self, value):
         self.c_load = np.power(self.condensator_prefix * value * self.frequency_domain * 1j, -1)
-    
+        self.signal.emit_signal()
+
     def get_c_load(self):
         return self.c_load    
     
     def set_l_load(self, value):
         self.l_load = self.coil_prefix * value * self.frequency_domain * 1j
+        self.signal.emit_signal()
     
     def get_l_load(self):
         return self.l_load    
     
     def set_c_tune(self, value):
         self.c_tune = np.power(self.condensator_prefix * value * self.frequency_domain * 1j, -1)
+        self.signal.emit_signal()
     
     def get_c_tune(self):
         return self.c_tune    
     
     def set_l_tune(self, value):
         self.l_tune = self.coil_prefix * value * self.frequency_domain * 1j
+        self.signal.emit_signal()
     
     def get_l_tune(self):
         return self.l_tune
     
     def set_frequency_min(self, value):
         self.frequency_min = value
+        self.signal.emit_signal()
     
     def get_frequency_min(self):
         return self.frequency_min
     
     def set_frequency_max(self, value):
         self.frequency_max = value
+        self.signal.emit_signal()
     
     def get_frequency_max(self):
         return self.frequency_max
