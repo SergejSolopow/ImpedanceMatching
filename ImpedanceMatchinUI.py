@@ -6,7 +6,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from Visualisation import VisualWindow
 import sys
 
-
 class Ui_MainWindow(object):
     def __init__(self):
         self.c_load_min_value = 0
@@ -334,9 +333,11 @@ class Ui_MainWindow(object):
     
     #set imagenary part for the impedance of the load
     def set_imag_value(self):
-        text = self.lineImagPart.text()
-        self.imag_part_load = float(text)
-        self.visualisation.set_load_domain(imag = float(text))
+        text_imag = self.lineImagPart.text()
+        text_real = self.lineRealPart.text()
+        self.imag_part_load = float(text_imag)
+        self.real_part_load = float(text_real)
+        self.visualisation.set_load_domain(real = float(text_real), imag = float(text_imag))
 
     #set real part for the impedance of the load
     def set_real_value(self):
