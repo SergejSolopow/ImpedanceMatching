@@ -25,6 +25,8 @@ class MplCanvas(FigureCanvas):
 
 class VisualWindow(object):
     def __init__(self):
+        #create instace signal and connect it to the method update_plote. 
+        #every time the esignal is emited by any other instance, it will be cached and the plote will be updated 
         self.signal = Signal()
         self.signal.signal.connect(self.update_plot)        
         self.frequency_min = 5000000
@@ -33,7 +35,7 @@ class VisualWindow(object):
         self.lin_steps = 1000
         self.frequency_domain = np.linspace(self.frequency_min, self.frequency_max, self.lin_steps) 
         self.load_domain = np.ones(self.lin_steps)
-        self.impedance_domain = np.ones(self.lin_steps)
+        self.impedance_domain = np.ones(self.lin_steps) + np.ones(self.lin_steps)*1j
         self.modul_impedance = np.ones(self.lin_steps)
         self.condensator_prefix = 1e-12
         self.coil_prefix = 1e-6 
@@ -46,7 +48,7 @@ class VisualWindow(object):
         term_1  = np.power(self.c_load + self.l_load + self.load_domain, -1) 
         term_2 = np.power(self.c_tune + self.l_tune, -1)
         self.impedance_domain = np.power((term_1 + term_2), -1)
-        self.modul_impedance = np.power(self.impedance_domain * np.conj(self.impedance_domain), 2)
+        self.modul_impedance = np.power(self.impedance_domain * np.conj(self.impedance_domain), .5)
         self.signal.emit_signal()
 
     def get_freueny_domain(self):

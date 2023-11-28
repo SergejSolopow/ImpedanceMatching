@@ -227,12 +227,12 @@ class Ui_MainWindow(object):
         self.lineRealPart = QtWidgets.QLineEdit(self.groupBox_7)
         self.lineRealPart.setGeometry(QtCore.QRect(0, 60, 113, 31))
         self.lineRealPart.setObjectName("lineRealPart")
-        self.lineRealPart.returnPressed.connect(lambda: self.set_real_value())
+        self.lineRealPart.returnPressed.connect(lambda: self.set_load())
 
         self.lineImagPart = QtWidgets.QLineEdit(self.groupBox_7)
         self.lineImagPart.setGeometry(QtCore.QRect(0, 150, 113, 31))
         self.lineImagPart.setObjectName("lineImagPart")
-        self.lineImagPart.returnPressed.connect(lambda: self.set_imag_value())
+        self.lineImagPart.returnPressed.connect(lambda: self.set_load())
 
         self.label = QtWidgets.QLabel(self.groupBox_7)
         self.label.setGeometry(QtCore.QRect(0, 40, 47, 13))
@@ -332,18 +332,18 @@ class Ui_MainWindow(object):
         self.window.show()
     
     #set imagenary part for the impedance of the load
-    def set_imag_value(self):
+    def set_load(self):
         text_imag = self.lineImagPart.text()
         text_real = self.lineRealPart.text()
-        self.imag_part_load = float(text_imag)
-        self.real_part_load = float(text_real)
-        self.visualisation.set_load_domain(real = float(text_real), imag = float(text_imag))
-
-    #set real part for the impedance of the load
-    def set_real_value(self):
-        text = self.lineRealPart.text()
-        self.real_part_load = float(text)
-        self.visualisation.set_load_domain(real = float(text))
+        try:
+            self.imag_part_load = float(text_imag)
+            self.real_part_load = float(text_real)
+        except ValueError:
+            print("check if the value is not string")
+        finally:
+            real_value = self.real_part_load
+            imag_value = self.imag_part_load            
+        self.visualisation.set_load_domain(real = real_value, imag = imag_value)
         
     def change_c_load_lcd(self):
         slider_value = self.c_load_slider.value()
