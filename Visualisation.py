@@ -29,6 +29,7 @@ class VisualWindow(object):
         #every time the esignal is emited by any other instance, it will be cached and the plote will be updated 
         self.signal = Signal()
         self.signal.signal.connect(self.update_plot)        
+        
         self.frequency_min = 5000000
         self.frequency_max = 30000000
         #by default linsteps is 1000
@@ -36,8 +37,13 @@ class VisualWindow(object):
         self.frequency_domain = np.linspace(self.frequency_min, self.frequency_max, self.lin_steps) 
         self.load_domain = np.ones(self.lin_steps)
         self.impedance_domain = np.ones(self.lin_steps) + np.ones(self.lin_steps)*1j
+        #modul is the mathematic expression for |z * z*|^0.5
         self.modul_impedance = np.ones(self.lin_steps)
+        #normalized modul
+        self.normalized_modul =  np.ones(self.lin_steps)
+        #for the picofarad condensator
         self.condensator_prefix = 1e-12
+        #for the microhenry coils
         self.coil_prefix = 1e-6 
         self.c_load = np.ones(self.lin_steps)
         self.l_load = np.ones(self.lin_steps)
@@ -49,6 +55,7 @@ class VisualWindow(object):
         term_2 = np.power(self.c_tune + self.l_tune, -1)
         self.impedance_domain = np.power((term_1 + term_2), -1)
         self.modul_impedance = np.power(self.impedance_domain * np.conj(self.impedance_domain), .5)
+        self.normalized_modul = self.modul_impedance/np.max(self.modul_impedance)
         self.signal.emit_signal()
 
     def get_freueny_domain(self):
@@ -124,7 +131,8 @@ class VisualWindow(object):
 
     def update_plot(self):
         self.canvas.axes.cla()  # Clear the canvas.
-        self.canvas.axes.plot(self.frequency_domain, self.modul_impedance, 'r')
+        #self.canvas.axes.plot(self.frequency_domain, self.modul_impedance, 'r')
+        self.canvas.axes.plot(self.frequency_domain, self.normalized_modul, 'r')
         # Trigger the canvas to update and redraw.
         self.canvas.draw()
 
